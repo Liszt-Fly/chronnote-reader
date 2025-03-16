@@ -8,61 +8,92 @@
 	justify-content: space-between;
 	-moz-window-dragging: drag;
 	user-select: none;
-	color: #404040;
+	color: var(--fill-primary);
 	font-size: 13px;
 	height: $height-toolbar !important;
-	min-height: 41px;
-	margin: 0;
-	padding: 0px 8px;
+	min-height: 48px;
+	margin: 8px 16px;
+	padding: 0;
 	min-width: 1px;
-	background: var(--material-toolbar);
-	border-bottom: var(--material-panedivider);
+	background: var(--material-background);
+	border: 1px solid var(--material-border-quinary);
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	transition: all 0.2s ease;
 
 	.start,
 	.center,
 	.end {
 		display: flex;
 		align-items: center;
-		gap: 4px;
+		height: 100%;
+	}
+
+	.start {
+		padding-left: 4px;
 	}
 
 	.end {
 		justify-content: flex-end;
 		padding-inline-end: var(--toolbar-placeholder-width);
-
+		padding-right: 4px;
 	}
 
 	.custom-sections {
 		display: flex;
 		padding: 0 3px;
-		gap: 3px;
+		gap: 4px;
 	}
 
 	.toolbar-button, .toolbar-text-input {
 		-moz-window-dragging: no-drag;
 	}
 
+	.toolbar-section {
+		display: flex;
+		align-items: center;
+		height: 100%;
+		padding: 0 4px;
+		border-right: 1px solid var(--material-border-quinary);
+		
+		&:last-child {
+			border-right: none;
+		}
+	}
+
 	#pageNumber {
-		width: 52px;
-		text-align: right;
+		width: 40px;
+		text-align: center;
+		font-feature-settings: "tnum";
+		font-variant-numeric: tabular-nums;
 	}
 
 	#numPages {
 		color: var(--fill-secondary);
-		margin-left: 0;
-		display: flex;
-
-		div {
-			position: absolute;
-		}
+		font-feature-settings: "tnum";
+		font-variant-numeric: tabular-nums;
+		font-size: 12px;
+		display: inline-flex;
+		align-items: center;
+		white-space: nowrap;
 	}
 
-	.divider {
-		width: 1px;
-		height: 20px;
-		border-radius: 0.5px;
-		background: var(--fill-quinary);
-		margin: 0 4px;
+	.document-type {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 0 8px;
+		height: 28px;
+		border-radius: 6px;
+		background-color: var(--fill-quinary);
+		color: var(--fill-primary);
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 0.5px;
+		
+		.document-type-text {
+			margin-right: 2px;
+		}
 	}
 
 	@include macOS-inactive-opacity;
@@ -82,42 +113,87 @@
 
 .toolbar-button {
 	color: var(--fill-secondary);
-	width: 28px;
-	height: 28px;
+	width: 36px;
+	height: 36px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 5px;
-
+	border-radius: 8px;
+	transition: all 0.15s ease;
+	position: relative;
+	margin: 0 2px;
+	
 	&:hover {
+		color: var(--fill-primary);
 		background-color: var(--fill-quinary);
 	}
 
 	&:active, &.active, &.active-pseudo-class-fix {
+		color: var(--fill-primary);
 		background-color: var(--fill-quarternary);
 	}
 
 	&[disabled] {
 		pointer-events: none;
+		opacity: 0.4;
+	}
+
+	&:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 2px var(--color-focus-search);
+	}
+
+	&.active {
+		background-color: var(--fill-quarternary);
+		color: var(--fill-primary);
+		position: relative;
+		
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: 3px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 4px;
+			height: 4px;
+			border-radius: 50%;
+			background-color: var(--fill-primary);
+		}
 	}
 }
 
 .toolbar-dropdown-button {
 	gap: 4px;
-	width: 40px;
+	width: 44px;
+	padding-right: 4px;
 }
 
 .toolbar-text-input {
-	padding: 0 7px;
+	padding: 0 8px;
 	background: var(--material-background);
-	border-radius: 5px;
-	border: var(--material-border-quinary);
-	height: 28px;
+	border-radius: 6px;
+	border: 1px solid var(--material-border-quinary);
+	height: 32px;
 	width: 100%;
+	transition: all 0.15s ease;
 
 	&:focus {
 		outline: none;
 		border-color: rgba(0, 0, 0, 0);
 		box-shadow: 0 0 0 var(--width-focus-border) var(--color-focus-search);
+	}
+}
+
+.tools {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	padding: 0 8px;
+	border-left: 1px solid var(--material-border-quinary);
+	border-right: 1px solid var(--material-border-quinary);
+	background-color: rgba(0, 0, 0, 0.02);
+	
+	.toolbar-button {
+		margin: 0 2px;
 	}
 }

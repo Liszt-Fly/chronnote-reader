@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext, Fragment } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { useIntl } from 'react-intl';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
@@ -12,7 +12,6 @@ import {
 	ZoomOut,
 	Maximize,
 	Type,
-	ChevronLeft,
 	ChevronUp,
 	ChevronDown,
 	Highlighter,
@@ -24,7 +23,13 @@ import {
 	Eraser,
 	Search,
 	ChevronDown as ChevronDown8,
-	PanelBottom
+	PanelBottom,
+	Hand,
+	Circle,
+	Square,
+	Triangle,
+	ArrowUpRight,
+	Plus
 } from 'lucide-react';
 
 function Toolbar(props) {
@@ -73,106 +78,87 @@ function Toolbar(props) {
 		}
 	}
 
-	const iconStyle = { size: 20, strokeWidth: 1.5 };
+	const iconStyle = { size: 18, strokeWidth: 1.5 };
 
 	return (
 		<div className="toolbar" data-tabstop={1} role="application">
+			{/* 左侧工具栏 - 主要工具 */}
 			<div className="start">
-				<button
-					id="sidebarToggle"
-					className="toolbar-button sidebar-toggle"
-					title={intl.formatMessage({ id: 'pdfReader.toggleSidebar' })}
-					tabIndex={-1}
-					onClick={handleSidebarButtonClick}
-				><PanelLeft {...iconStyle} /></button>
-				<div className="divider"/>
-				<button
-					id="zoomOut"
-					className="toolbar-button zoomOut"
-					title={intl.formatMessage({ id: 'pdfReader.zoomOut' })}
-					tabIndex={-1}
-					disabled={!props.enableZoomOut}
-					onClick={props.onZoomOut}
-				><ZoomOut {...iconStyle} /></button>
-				<button
-					id="zoomIn"
-					className="toolbar-button zoomIn"
-					title={intl.formatMessage({ id: 'pdfReader.zoomIn' })}
-					tabIndex={-1}
-					disabled={!props.enableZoomIn}
-					onClick={props.onZoomIn}
-				><ZoomIn {...iconStyle} /></button>
-				<button
-					id="zoomAuto"
-					className="toolbar-button zoomAuto"
-					title={intl.formatMessage({ id: 'pdfReader.zoomReset' })}
-					tabIndex={-1}
-					disabled={!props.enableZoomReset}
-					onClick={props.onZoomReset}
-				><Maximize {...iconStyle} /></button>
-				<button
-					id="appearance"
-					className={cx('toolbar-button', { active: props.appearancePopup })}
-					title={intl.formatMessage({ id: 'pdfReader.appearance' })}
-					tabIndex={-1}
-					onClick={props.onToggleAppearancePopup}
-				><Type {...iconStyle} /></button>
-				<div className="divider"/>
-				<button
-					id="navigateBack"
-					className="toolbar-button navigateBack"
-					title={intl.formatMessage({ id: 'general.back' })}
-					tabIndex={-1}
-					disabled={!props.enableNavigateBack}
-					onClick={props.onNavigateBack}
-				><ChevronLeft {...iconStyle} /></button>
-				<div className="divider"/>
-				{['pdf', 'epub'].includes(props.type) && (
-					<React.Fragment>
-						<button
-							className="toolbar-button pageUp"
-							title={intl.formatMessage({ id: 'pdfReader.previousPage' })}
-							id="previous"
-							tabIndex={-1}
-							disabled={!props.enableNavigateToPreviousPage}
-							onClick={props.onNavigateToPreviousPage}
-							aria-describedby="numPages"
-						><ChevronUp {...iconStyle} /></button>
-						<button
-							className="toolbar-button pageDown"
-							title={intl.formatMessage({ id: 'pdfReader.nextPage' })}
-							id="next"
-							tabIndex={-1}
-							disabled={!props.enableNavigateToNextPage}
-							onClick={props.onNavigateToNextPage}
-							aria-describedby="numPages"
-						><ChevronDown {...iconStyle} /></button>
-					</React.Fragment>
-				)}
-				{['pdf', 'epub'].includes(props.type) && (
-					<input
-						ref={pageInputRef}
-						type="input"
-						id="pageNumber"
-						className="toolbar-text-input"
-						title={intl.formatMessage({
-							id: props.type === 'pdf' || props.usePhysicalPageNumbers
-								? 'pdfReader.page'
-								: 'pdfReader.location'
-						})}
-						defaultValue=""
-						size="4"
-						min="1"
+				<div className="toolbar-section">
+					<button
+						id="sidebarToggle"
+						className="toolbar-button sidebar-toggle"
+						title={intl.formatMessage({ id: 'pdfReader.toggleSidebar' })}
 						tabIndex={-1}
-						autoComplete="off"
-						onKeyDown={handlePageNumberKeydown}
-						onBlur={handlePageNumberBlur}
-					/>)}
-				{props.pageLabel && (
-					<span id="numPages">&nbsp;<div>{!(props.type === 'pdf' && props.pageIndex + 1 == props.pageLabel)
-						&& (props.pageIndex + 1)} / {props.pagesCount}</div></span>
-				)}
+						onClick={handleSidebarButtonClick}
+					><PanelLeft {...iconStyle} /></button>
+				</div>
+				
+				{/* 绘图工具区域 */}
+				<div className="toolbar-section">
+					<button
+						tabIndex={-1}
+						className={cx('toolbar-button', { active: props.tool.type === 'hand' })}
+						title="选择工具"
+						onClick={() => handleToolClick('hand')}
+					><Hand {...iconStyle} /></button>
+					
+					<button
+						tabIndex={-1}
+						className={cx('toolbar-button', { active: props.tool.type === 'ink' })}
+						title={intl.formatMessage({ id: 'pdfReader.draw' })}
+						disabled={props.readOnly}
+						onClick={() => handleToolClick('ink')}
+					><Pen {...iconStyle} /></button>
+					
+					{props.type === 'pdf' && (
+						<button
+							tabIndex={-1}
+							className={cx('toolbar-button', { active: props.tool.type === 'eraser' })}
+							title="橡皮擦"
+							disabled={props.readOnly}
+							onClick={() => handleToolClick('eraser')}
+						><Eraser {...iconStyle} /></button>
+					)}
+				</div>
+				
+				{/* 形状工具区域 */}
+				<div className="toolbar-section">
+					<button
+						tabIndex={-1}
+						className={cx('toolbar-button', { active: props.tool.type === 'circle' })}
+						title="圆形"
+						disabled={props.readOnly}
+						onClick={() => handleToolClick('circle')}
+					><Circle {...iconStyle} /></button>
+					
+					<button
+						tabIndex={-1}
+						className={cx('toolbar-button', { active: props.tool.type === 'square' })}
+						title="矩形"
+						disabled={props.readOnly}
+						onClick={() => handleToolClick('square')}
+					><Square {...iconStyle} /></button>
+					
+					<button
+						tabIndex={-1}
+						className={cx('toolbar-button', { active: props.tool.type === 'triangle' })}
+						title="三角形"
+						disabled={props.readOnly}
+						onClick={() => handleToolClick('triangle')}
+					><Triangle {...iconStyle} /></button>
+					
+					<button
+						tabIndex={-1}
+						className={cx('toolbar-button', { active: props.tool.type === 'arrow' })}
+						title="箭头"
+						disabled={props.readOnly}
+						onClick={() => handleToolClick('arrow')}
+					><ArrowUpRight {...iconStyle} /></button>
+				</div>
 			</div>
+			
+			{/* 中间工具栏 - 文本工具 */}
 			<div className="center tools">
 				<button
 					tabIndex={-1}
@@ -182,6 +168,7 @@ function Toolbar(props) {
 					onClick={() => handleToolClick('highlight')}
 					data-l10n-id="pdfReader-toolbar-highlight"
 				><Highlighter {...iconStyle} /></button>
+				
 				<button
 					tabIndex={-1}
 					className={cx('toolbar-button underline', { active: props.tool.type === 'underline' })}
@@ -190,6 +177,7 @@ function Toolbar(props) {
 					onClick={() => handleToolClick('underline')}
 					data-l10n-id="pdfReader-toolbar-underline"
 				><Underline {...iconStyle} /></button>
+				
 				<button
 					tabIndex={-1}
 					className={cx('toolbar-button note', {
@@ -200,6 +188,7 @@ function Toolbar(props) {
 					onClick={() => handleToolClick('note')}
 					data-l10n-id="pdfReader-toolbar-note"
 				><StickyNote {...iconStyle} /></button>
+				
 				{props.type === 'pdf' && (
 					<button
 						tabIndex={-1}
@@ -210,6 +199,7 @@ function Toolbar(props) {
 						data-l10n-id="pdfReader-toolbar-text"
 					><Text {...iconStyle} /></button>
 				)}
+				
 				{props.type === 'pdf' && (
 					<button
 						tabIndex={-1}
@@ -220,17 +210,7 @@ function Toolbar(props) {
 						data-l10n-id="pdfReader-toolbar-area"
 					><Image {...iconStyle} /></button>
 				)}
-				{props.type === 'pdf' && (
-					<button
-						tabIndex={-1}
-						className={cx('toolbar-button ink', { active: ['ink', 'eraser'].includes(props.tool.type) })}
-						title={intl.formatMessage({ id: 'pdfReader.draw' })}
-						disabled={props.readOnly}
-						onClick={() => handleToolClick('ink')}
-						data-l10n-id="pdfReader-toolbar-draw"
-					><Pen {...iconStyle} /></button>
-				)}
-				<div className="divider"/>
+				
 				<button
 					tabIndex={-1}
 					className="toolbar-button toolbar-dropdown-button"
@@ -246,25 +226,120 @@ function Toolbar(props) {
 					<ChevronDown8 size={8} strokeWidth={1.5} />
 				</button>
 			</div>
+			
+			{/* 右侧工具栏 - 导航和其他功能 */}
 			<div className="end">
-				<CustomSections type="Toolbar"/>
-				<button
-					className={cx('toolbar-button find', { active: props.findPopupOpen })}
-					title={intl.formatMessage({ id: 'pdfReader.findInDocument' })}
-					tabIndex={-1}
-					onClick={handleFindClick}
-				><Search {...iconStyle} /></button>
-				{platform === 'zotero' && props.showContextPaneToggle && (
-					<Fragment>
-						<div className="divider"/>
+				<div className="toolbar-section">
+					<button
+						id="zoomOut"
+						className="toolbar-button zoomOut"
+						title={intl.formatMessage({ id: 'pdfReader.zoomOut' })}
+						tabIndex={-1}
+						disabled={!props.enableZoomOut}
+						onClick={props.onZoomOut}
+					><ZoomOut {...iconStyle} /></button>
+					
+					<button
+						id="zoomIn"
+						className="toolbar-button zoomIn"
+						title={intl.formatMessage({ id: 'pdfReader.zoomIn' })}
+						tabIndex={-1}
+						disabled={!props.enableZoomIn}
+						onClick={props.onZoomIn}
+					><ZoomIn {...iconStyle} /></button>
+					
+					<button
+						id="zoomAuto"
+						className="toolbar-button zoomAuto"
+						title={intl.formatMessage({ id: 'pdfReader.zoomReset' })}
+						tabIndex={-1}
+						disabled={!props.enableZoomReset}
+						onClick={props.onZoomReset}
+					><Maximize {...iconStyle} /></button>
+				</div>
+				
+				<div className="toolbar-section">
+					<button
+						id="appearance"
+						className={cx('toolbar-button', { active: props.appearancePopup })}
+						title={intl.formatMessage({ id: 'pdfReader.appearance' })}
+						tabIndex={-1}
+						onClick={props.onToggleAppearancePopup}
+					><Type {...iconStyle} /></button>
+					
+					<button
+						className={cx('toolbar-button find', { active: props.findPopupOpen })}
+						title={intl.formatMessage({ id: 'pdfReader.findInDocument' })}
+						tabIndex={-1}
+						onClick={handleFindClick}
+					><Search {...iconStyle} /></button>
+				</div>
+				
+				{['pdf', 'epub'].includes(props.type) && (
+					<div className="toolbar-section">
+						<button
+							className="toolbar-button pageUp"
+							title={intl.formatMessage({ id: 'pdfReader.previousPage' })}
+							id="previous"
+							tabIndex={-1}
+							disabled={!props.enableNavigateToPreviousPage}
+							onClick={props.onNavigateToPreviousPage}
+							aria-describedby="numPages"
+						><ChevronUp {...iconStyle} /></button>
+						
+						<input
+							ref={pageInputRef}
+							type="input"
+							id="pageNumber"
+							className="toolbar-text-input"
+							title={intl.formatMessage({
+								id: props.type === 'pdf' || props.usePhysicalPageNumbers
+									? 'pdfReader.page'
+									: 'pdfReader.location'
+							})}
+							defaultValue=""
+							size="4"
+							min="1"
+							tabIndex={-1}
+							autoComplete="off"
+							onKeyDown={handlePageNumberKeydown}
+							onBlur={handlePageNumberBlur}
+						/>
+						
+						{props.pageLabel && (
+							<span id="numPages">&nbsp;/ {props.pagesCount}</span>
+						)}
+						
+						<button
+							className="toolbar-button pageDown"
+							title={intl.formatMessage({ id: 'pdfReader.nextPage' })}
+							id="next"
+							tabIndex={-1}
+							disabled={!props.enableNavigateToNextPage}
+							onClick={props.onNavigateToNextPage}
+							aria-describedby="numPages"
+						><ChevronDown {...iconStyle} /></button>
+					</div>
+				)}
+				
+				<div className="toolbar-section">
+					<CustomSections type="Toolbar"/>
+					
+					{platform === 'zotero' && props.showContextPaneToggle && (
 						<button
 							className="toolbar-button context-pane-toggle"
 							title={intl.formatMessage({ id: 'pdfReader.toggleContextPane' })}
 							tabIndex={-1}
 							onClick={props.onToggleContextPane}
 						>{props.stackedView ? <PanelBottom {...iconStyle} /> : <PanelLeft {...iconStyle} className="standard-view"/>}</button>
-					</Fragment>
-				)}
+					)}
+					
+					<button
+						className="toolbar-button"
+						title="更多工具"
+						tabIndex={-1}
+					><Plus {...iconStyle} /></button>
+				</div>
 			</div>
 		</div>
 	);
