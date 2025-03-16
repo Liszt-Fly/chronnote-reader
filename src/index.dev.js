@@ -1,5 +1,5 @@
 import Reader from './common/reader';
-import strings from '../src/en-us.strings';
+import strings from './zh-cn.string';
 import pdf from '../demo/pdf';
 import epub from '../demo/epub';
 import snapshot from '../demo/snapshot';
