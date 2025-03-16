@@ -29,6 +29,7 @@
 body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 13px;
+	background-color: rgb(242, 242, 242);
 	// TODO: Remove --note-font-size, as it's probably not necessary to change font size for highlights and comments
 	--note-font-size: 13 / 16 * 1rem;
 }

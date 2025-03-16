@@ -72,7 +72,6 @@ body {
 	bottom: 0;
 	left: 0;
 	outline: none;
-	box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 /* Disable scrollbars */
@@ -170,7 +169,6 @@ body.portal #viewerContainer::-webkit-scrollbar { /* WebKit */
 	overflow: hidden;
 	border: var(--page-border);
 	background-clip: content-box;
-	box-shadow: 0 0 2px 0 rgba(0,0,0,.14),0 2px 2px 0 rgba(0,0,0,.12),0 1px 3px 0 rgba(0,0,0,.12);
 }
 
 .pdfViewer .dummyPage {

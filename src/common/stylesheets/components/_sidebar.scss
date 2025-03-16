@@ -8,15 +8,17 @@ body.sidebar-open {
 	display: flex;
 	flex-direction: column;
 	position: absolute;
-	top: calc($height-toolbar + 16px);
-	bottom: 16px;
+	top: 50%;
+	transform: translateY(-50%);
+	margin-top: calc($height-toolbar / 2);
+	height: 85%;
 	width: var(--sidebar-width);
 	z-index: $z-index-sidebar;
 	left: calc(-1 * var(--sidebar-width));
 	border-right: none;
 	background-color: white;
 	border-radius: 0 8px 8px 0;
-	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+	box-shadow: none;
 	overflow: hidden;
 
 	body.sidebar-open & {
