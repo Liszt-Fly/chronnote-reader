@@ -5,11 +5,15 @@
 	top: $height-toolbar;
 	bottom: var(--bottom-placeholder-height);
 	display: flex;
+	padding: 16px 16px 16px 0;
 
 	.primary-view, .secondary-view {
 		display: flex;
 		position: relative;
 		overflow: hidden;
+		border-radius: 8px;
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+		background-color: white;
 
 		// Don't affect iframes inside popups
 		& > iframe {
@@ -17,6 +21,7 @@
 			width: 100%;
 			border: 0;
 			visibility: hidden; // Prevent iframe flashing while loading
+			border-radius: 8px;
 
 			&.loaded {
 				visibility: visible;
@@ -30,6 +35,12 @@
 
 	.secondary-view {
 		display: none;
+	}
+}
+
+body.sidebar-open {
+	#split-view, .split-view {
+		inset-inline-start: calc(var(--sidebar-width) + 16px);
 	}
 }
 

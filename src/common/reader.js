@@ -169,7 +169,7 @@ class Reader {
 			outlineQuery: '',
 			pageLabels: [],
 			sidebarOpen: options.sidebarOpen !== undefined ? options.sidebarOpen : true,
-			sidebarWidth: options.sidebarWidth !== undefined ? options.sidebarWidth : 240,
+			sidebarWidth: options.sidebarWidth !== undefined ? options.sidebarWidth : 280,
 			sidebarView: 'annotations',
 			bottomPlaceholderHeight: options.bottomPlaceholderHeight || null,
 			toolbarPlaceholderWidth: options.toolbarPlaceholderWidth || 0,
@@ -1558,7 +1558,7 @@ class Reader {
 			let formatted = '';
 			if (annotation.text) {
 				let text = annotation.text.trim();
-				formatted = fromText ? text : '“' + text + '”';
+				formatted = fromText ? text : '"' + text + '"';
 			}
 			let comment = annotation.comment?.trim();
 			if (comment) {

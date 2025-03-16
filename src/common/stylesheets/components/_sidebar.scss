@@ -8,28 +8,33 @@ body.sidebar-open {
 	display: flex;
 	flex-direction: column;
 	position: absolute;
-	top: 41px;
-	bottom: 0;
+	top: calc($height-toolbar + 16px);
+	bottom: 16px;
 	width: var(--sidebar-width);
 	z-index: $z-index-sidebar;
 	left: calc(-1 * var(--sidebar-width));
-	border-right: var(--material-panedivider);
-	background-color: var(--material-sidepane);
+	border-right: none;
+	background-color: white;
+	border-radius: 0 8px 8px 0;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+	overflow: hidden;
 
 	body.sidebar-open & {
 		visibility: visible;
-		left: 0;
+		left: 16px;
 	}
 
 	.sidebar-toolbar {
 		display: flex;
 		justify-content: space-between;
-		height: 40px;
+		height: 48px;
 		align-items: center;
-		padding: 0 8px;
+		padding: 0 16px;
+		border-bottom: 1px solid #f0f0f0;
 
 		.start {
 			display: flex;
+			gap: 8px;
 		}
 
 		.end {
@@ -44,7 +49,8 @@ body.sidebar-open {
 	flex: 1 1 0;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
-	background-color: var(--material-sidepane);
+	background-color: white;
+	padding: 12px;
 
 	.viewWrapper.hidden {
 		display: none;
