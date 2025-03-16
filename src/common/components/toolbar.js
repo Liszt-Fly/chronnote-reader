@@ -1,28 +1,31 @@
 import React, { useEffect, useRef, useContext, Fragment } from 'react';
 import { useIntl } from 'react-intl';
 import cx from 'classnames';
+import PropTypes from 'prop-types';
 import CustomSections from './common/custom-sections';
 import { ReaderContext } from '../reader';
 import { IconColor20 } from './common/icons';
 
-import IconSidebar from '../../../res/icons/20/sidebar.svg';
-import IconSidebarBottom from '../../../res/icons/20/sidebar-bottom.svg';
-import IconZoomIn from '../../../res/icons/20/zoom-in.svg';
-import IconZoomOut from '../../../res/icons/20/zoom-out.svg';
-import IconAutoWidth from '../../../res/icons/20/auto-width.svg';
-import IconChevronLeft from '../../../res/icons/20/chevron-left.svg';
-import IconChevronUp from '../../../res/icons/20/chevron-up.svg';
-import IconChevronDown from '../../../res/icons/20/chevron-down.svg';
-import IconFormatText from '../../../res/icons/20/format-text.svg';
-import IconHighlight from '../../../res/icons/20/annotate-highlight.svg';
-import IconUnderline from '../../../res/icons/20/annotate-underline.svg';
-import IconNote from '../../../res/icons/20/annotate-note.svg';
-import IconText from '../../../res/icons/20/annotate-text.svg';
-import IconImage from '../../../res/icons/20/annotate-area.svg';
-import IconInk from '../../../res/icons/20/annotate-ink.svg';
-import IconEraser from '../../../res/icons/20/annotate-eraser.svg';
-import IconFind from '../../../res/icons/20/magnifier.svg';
-import IconChevronDown8 from '../../../res/icons/8/chevron-8.svg';
+import {
+	PanelLeft,
+	ZoomIn,
+	ZoomOut,
+	Maximize,
+	Type,
+	ChevronLeft,
+	ChevronUp,
+	ChevronDown,
+	Highlighter,
+	Underline,
+	StickyNote,
+	Text,
+	Image,
+	Pen,
+	Eraser,
+	Search,
+	ChevronDown as ChevronDown8,
+	PanelBottom
+} from 'lucide-react';
 
 function Toolbar(props) {
 	const intl = useIntl();
@@ -35,7 +38,7 @@ function Toolbar(props) {
 		}
 	}, [props.pageLabel, props.pageIndex]);
 
-	function handleSidebarButtonClick(event) {
+	function handleSidebarButtonClick(_event) {
 		props.onToggleSidebar(!props.sidebarOpen);
 	}
 
@@ -44,7 +47,7 @@ function Toolbar(props) {
 		props.onOpenColorContextMenu({ x: br.left, y: br.bottom });
 	}
 
-	function handleFindClick(event) {
+	function handleFindClick(_event) {
 		props.onToggleFind();
 	}
 
@@ -70,6 +73,8 @@ function Toolbar(props) {
 		}
 	}
 
+	const iconStyle = { size: 20, strokeWidth: 1.5 };
+
 	return (
 		<div className="toolbar" data-tabstop={1} role="application">
 			<div className="start">
@@ -79,7 +84,7 @@ function Toolbar(props) {
 					title={intl.formatMessage({ id: 'pdfReader.toggleSidebar' })}
 					tabIndex={-1}
 					onClick={handleSidebarButtonClick}
-				><IconSidebar/></button>
+				><PanelLeft {...iconStyle} /></button>
 				<div className="divider"/>
 				<button
 					id="zoomOut"
@@ -88,7 +93,7 @@ function Toolbar(props) {
 					tabIndex={-1}
 					disabled={!props.enableZoomOut}
 					onClick={props.onZoomOut}
-				><IconZoomOut/></button>
+				><ZoomOut {...iconStyle} /></button>
 				<button
 					id="zoomIn"
 					className="toolbar-button zoomIn"
@@ -96,7 +101,7 @@ function Toolbar(props) {
 					tabIndex={-1}
 					disabled={!props.enableZoomIn}
 					onClick={props.onZoomIn}
-				><IconZoomIn/></button>
+				><ZoomIn {...iconStyle} /></button>
 				<button
 					id="zoomAuto"
 					className="toolbar-button zoomAuto"
@@ -104,14 +109,14 @@ function Toolbar(props) {
 					tabIndex={-1}
 					disabled={!props.enableZoomReset}
 					onClick={props.onZoomReset}
-				><IconAutoWidth/></button>
+				><Maximize {...iconStyle} /></button>
 				<button
 					id="appearance"
 					className={cx('toolbar-button', { active: props.appearancePopup })}
 					title={intl.formatMessage({ id: 'pdfReader.appearance' })}
 					tabIndex={-1}
 					onClick={props.onToggleAppearancePopup}
-				><IconFormatText/></button>
+				><Type {...iconStyle} /></button>
 				<div className="divider"/>
 				<button
 					id="navigateBack"
@@ -120,7 +125,7 @@ function Toolbar(props) {
 					tabIndex={-1}
 					disabled={!props.enableNavigateBack}
 					onClick={props.onNavigateBack}
-				><IconChevronLeft/></button>
+				><ChevronLeft {...iconStyle} /></button>
 				<div className="divider"/>
 				{['pdf', 'epub'].includes(props.type) && (
 					<React.Fragment>
@@ -132,7 +137,7 @@ function Toolbar(props) {
 							disabled={!props.enableNavigateToPreviousPage}
 							onClick={props.onNavigateToPreviousPage}
 							aria-describedby="numPages"
-						><IconChevronUp/></button>
+						><ChevronUp {...iconStyle} /></button>
 						<button
 							className="toolbar-button pageDown"
 							title={intl.formatMessage({ id: 'pdfReader.nextPage' })}
@@ -141,7 +146,7 @@ function Toolbar(props) {
 							disabled={!props.enableNavigateToNextPage}
 							onClick={props.onNavigateToNextPage}
 							aria-describedby="numPages"
-						><IconChevronDown/></button>
+						><ChevronDown {...iconStyle} /></button>
 					</React.Fragment>
 				)}
 				{['pdf', 'epub'].includes(props.type) && (
@@ -176,7 +181,7 @@ function Toolbar(props) {
 					disabled={props.readOnly}
 					onClick={() => handleToolClick('highlight')}
 					data-l10n-id="pdfReader-toolbar-highlight"
-				><IconHighlight/></button>
+				><Highlighter {...iconStyle} /></button>
 				<button
 					tabIndex={-1}
 					className={cx('toolbar-button underline', { active: props.tool.type === 'underline' })}
@@ -184,7 +189,7 @@ function Toolbar(props) {
 					disabled={props.readOnly}
 					onClick={() => handleToolClick('underline')}
 					data-l10n-id="pdfReader-toolbar-underline"
-				><IconUnderline/></button>
+				><Underline {...iconStyle} /></button>
 				<button
 					tabIndex={-1}
 					className={cx('toolbar-button note', {
@@ -194,7 +199,7 @@ function Toolbar(props) {
 					disabled={props.readOnly}
 					onClick={() => handleToolClick('note')}
 					data-l10n-id="pdfReader-toolbar-note"
-				><IconNote/></button>
+				><StickyNote {...iconStyle} /></button>
 				{props.type === 'pdf' && (
 					<button
 						tabIndex={-1}
@@ -203,7 +208,7 @@ function Toolbar(props) {
 						disabled={props.readOnly}
 						onClick={() => handleToolClick('text')}
 						data-l10n-id="pdfReader-toolbar-text"
-					><IconText/></button>
+					><Text {...iconStyle} /></button>
 				)}
 				{props.type === 'pdf' && (
 					<button
@@ -213,7 +218,7 @@ function Toolbar(props) {
 						disabled={props.readOnly}
 						onClick={() => handleToolClick('image')}
 						data-l10n-id="pdfReader-toolbar-area"
-					><IconImage/></button>
+					><Image {...iconStyle} /></button>
 				)}
 				{props.type === 'pdf' && (
 					<button
@@ -223,7 +228,7 @@ function Toolbar(props) {
 						disabled={props.readOnly}
 						onClick={() => handleToolClick('ink')}
 						data-l10n-id="pdfReader-toolbar-draw"
-					><IconInk/></button>
+					><Pen {...iconStyle} /></button>
 				)}
 				<div className="divider"/>
 				<button
@@ -235,10 +240,10 @@ function Toolbar(props) {
 				>
 					{
 						props.tool.type === 'eraser'
-						? <IconEraser/>
-						: <IconColor20 color={props.tool.color || ['pointer', 'hand'].includes(props.tool.type) && 'transparent'}/>
+							? <Eraser {...iconStyle} />
+							: <IconColor20 color={props.tool.color || ['pointer', 'hand'].includes(props.tool.type) && 'transparent'}/>
 					}
-					<IconChevronDown8/>
+					<ChevronDown8 size={8} strokeWidth={1.5} />
 				</button>
 			</div>
 			<div className="end">
@@ -248,7 +253,7 @@ function Toolbar(props) {
 					title={intl.formatMessage({ id: 'pdfReader.findInDocument' })}
 					tabIndex={-1}
 					onClick={handleFindClick}
-				><IconFind/></button>
+				><Search {...iconStyle} /></button>
 				{platform === 'zotero' && props.showContextPaneToggle && (
 					<Fragment>
 						<div className="divider"/>
@@ -257,12 +262,49 @@ function Toolbar(props) {
 							title={intl.formatMessage({ id: 'pdfReader.toggleContextPane' })}
 							tabIndex={-1}
 							onClick={props.onToggleContextPane}
-						>{props.stackedView ? <IconSidebarBottom/> : <IconSidebar className="standard-view"/>}</button>
+						>{props.stackedView ? <PanelBottom {...iconStyle} /> : <PanelLeft {...iconStyle} className="standard-view"/>}</button>
 					</Fragment>
 				)}
 			</div>
 		</div>
 	);
 }
+
+Toolbar.propTypes = {
+	type: PropTypes.string,
+	pageLabel: PropTypes.string,
+	pageIndex: PropTypes.number,
+	pagesCount: PropTypes.number,
+	sidebarOpen: PropTypes.bool,
+	enableZoomOut: PropTypes.bool,
+	enableZoomIn: PropTypes.bool,
+	enableZoomReset: PropTypes.bool,
+	enableNavigateBack: PropTypes.bool,
+	enableNavigateToPreviousPage: PropTypes.bool,
+	enableNavigateToNextPage: PropTypes.bool,
+	appearancePopup: PropTypes.bool,
+	findPopupOpen: PropTypes.bool,
+	readOnly: PropTypes.bool,
+	usePhysicalPageNumbers: PropTypes.bool,
+	showContextPaneToggle: PropTypes.bool,
+	stackedView: PropTypes.bool,
+	tool: PropTypes.shape({
+		type: PropTypes.string,
+		color: PropTypes.string
+	}),
+	onToggleSidebar: PropTypes.func,
+	onZoomOut: PropTypes.func,
+	onZoomIn: PropTypes.func,
+	onZoomReset: PropTypes.func,
+	onToggleAppearancePopup: PropTypes.func,
+	onNavigateBack: PropTypes.func,
+	onNavigateToPreviousPage: PropTypes.func,
+	onNavigateToNextPage: PropTypes.func,
+	onChangePageNumber: PropTypes.func,
+	onChangeTool: PropTypes.func,
+	onOpenColorContextMenu: PropTypes.func,
+	onToggleFind: PropTypes.func,
+	onToggleContextPane: PropTypes.func
+};
 
 export default Toolbar;
