@@ -1,5 +1,4 @@
-import React, { Fragment, useState, useCallback, useEffect, useRef, useImperativeHandle } from 'react';
-import cx from 'classnames';
+import React, { Fragment, useState, useRef, useImperativeHandle } from 'react';
 import Toolbar from './toolbar';
 import Sidebar from './sidebar/sidebar';
 import SelectionPopup from './view-popup/selection-popup';
@@ -113,7 +112,7 @@ const ReaderUI = React.forwardRef((props, ref) => {
 
 	return (
 		<Fragment>
-			<div>
+			<div className="toolbar-container">
 				<Toolbar
 					type={props.type}
 					pageIndex={viewStats.pageIndex || 0}
@@ -150,62 +149,62 @@ const ReaderUI = React.forwardRef((props, ref) => {
 					onToggleFind={props.onToggleFind}
 					onToggleContextPane={props.onToggleContextPane}
 				/>
-				<div>
-					{state.sidebarOpen === true &&
-						<Sidebar
-							type={props.type}
-							view={state.sidebarView}
-							filter={state.filter}
-							outline={state.outline}
-							outlineQuery={state.outlineQuery}
-							onUpdateOutline={props.onUpdateOutline}
-							onUpdateOutlineQuery={props.onUpdateOutlineQuery}
-							onChangeView={props.onChangeSidebarView}
-							onChangeFilter={props.onChangeFilter}
-							thumbnailsView={
-								<ThumbnailsView
-									pageLabels={state.pageLabels}
-									thumbnails={state.thumbnails}
-									currentPageIndex={viewStats.pageIndex || 0}
-									onOpenThumbnailContextMenu={props.onOpenThumbnailContextMenu}
-									onRenderThumbnails={props.onRenderThumbnails}
-									onNavigate={props.onNavigate}
-								/>
-							}
-							annotationsView={
-								<AnnotationsView
-									ref={annotationsViewRef}
-									type={props.type}
-									readOnly={state.readOnly}
-									filter={state.filter}
-									annotations={state.annotations}
-									selectedIDs={state.selectedAnnotationIDs}
-									authorName="test"
-									onSelectAnnotations={props.onSelectAnnotations}
-									onUpdateAnnotations={props.onUpdateAnnotations}
-									onSetDataTransferAnnotations={props.onSetDataTransferAnnotations}
-									onOpenTagsPopup={props.onOpenTagsPopup}
-									onOpenPageLabelPopup={props.onOpenPageLabelPopup}
-									onOpenAnnotationContextMenu={props.onOpenAnnotationContextMenu}
-									onOpenSelectorContextMenu={props.onOpenSelectorContextMenu}
-									onChangeFilter={props.onChangeFilter}
-								/>
-							}
-							outlineView={
-								<OutlineView
-									outline={state.outline}
-									currentOutlinePath={viewStats.outlinePath}
-									onNavigate={props.onNavigate}
-									onOpenLink={props.onOpenLink}
-									onUpdate={props.onUpdateOutline}
-								/>
-							}
-						/>
-					}
-
-				</div>
-				{state.sidebarOpen === true && <SidebarResizer onResize={props.onResizeSidebar}/>}
 			</div>
+			<div>
+				{state.sidebarOpen === true &&
+					<Sidebar
+						type={props.type}
+						view={state.sidebarView}
+						filter={state.filter}
+						outline={state.outline}
+						outlineQuery={state.outlineQuery}
+						onUpdateOutline={props.onUpdateOutline}
+						onUpdateOutlineQuery={props.onUpdateOutlineQuery}
+						onChangeView={props.onChangeSidebarView}
+						onChangeFilter={props.onChangeFilter}
+						thumbnailsView={
+							<ThumbnailsView
+								pageLabels={state.pageLabels}
+								thumbnails={state.thumbnails}
+								currentPageIndex={viewStats.pageIndex || 0}
+								onOpenThumbnailContextMenu={props.onOpenThumbnailContextMenu}
+								onRenderThumbnails={props.onRenderThumbnails}
+								onNavigate={props.onNavigate}
+							/>
+						}
+						annotationsView={
+							<AnnotationsView
+								ref={annotationsViewRef}
+								type={props.type}
+								readOnly={state.readOnly}
+								filter={state.filter}
+								annotations={state.annotations}
+								selectedIDs={state.selectedAnnotationIDs}
+								authorName="test"
+								onSelectAnnotations={props.onSelectAnnotations}
+								onUpdateAnnotations={props.onUpdateAnnotations}
+								onSetDataTransferAnnotations={props.onSetDataTransferAnnotations}
+								onOpenTagsPopup={props.onOpenTagsPopup}
+								onOpenPageLabelPopup={props.onOpenPageLabelPopup}
+								onOpenAnnotationContextMenu={props.onOpenAnnotationContextMenu}
+								onOpenSelectorContextMenu={props.onOpenSelectorContextMenu}
+								onChangeFilter={props.onChangeFilter}
+							/>
+						}
+						outlineView={
+							<OutlineView
+								outline={state.outline}
+								currentOutlinePath={viewStats.outlinePath}
+								onNavigate={props.onNavigate}
+								onOpenLink={props.onOpenLink}
+								onUpdate={props.onUpdateOutline}
+							/>
+						}
+					/>
+				}
+
+			</div>
+			{state.sidebarOpen === true && <SidebarResizer onResize={props.onResizeSidebar}/>}
 			<div className="split-view">
 				<View {...props} primary={true} state={state}/>
 				<SplitViewResizer onResize={props.onResizeSplitView}/>

@@ -1,9 +1,8 @@
-
 #split-view, .split-view {
 	position: absolute;
 	inset-inline-start: 0;
 	inset-inline-end: 0;
-	top: 41px;
+	top: $height-toolbar;
 	bottom: var(--bottom-placeholder-height);
 	display: flex;
 

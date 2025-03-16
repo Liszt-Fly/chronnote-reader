@@ -1,3 +1,11 @@
+.toolbar-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: $z-index-toolbar;
+}
+
 .toolbar {
 	left: 0;
 	right: 0;
@@ -12,13 +20,14 @@
 	font-size: 13px;
 	height: $height-toolbar !important;
 	min-height: 48px;
-	margin: 8px 16px;
+	margin: 0;
 	padding: 0;
 	min-width: 1px;
 	background: var(--material-background);
-	border: 1px solid var(--material-border-quinary);
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	border: none;
+	border-bottom: 1px solid var(--material-border-quinary);
+	border-radius: 0;
+	box-shadow: none;
 	transition: all 0.2s ease;
 
 	.start,
